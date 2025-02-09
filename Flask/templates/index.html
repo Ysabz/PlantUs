@@ -43,8 +43,8 @@
 
 /* Cell Styling */
 #field-view .cell {
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
   border: 1px solid #ccc;
   display: flex;
   align-items: center;
@@ -340,8 +340,8 @@ const soilImage = "../static/images/soil.jpg";
 // Function to create the grid
 function createGrid() {
   grid.innerHTML = ''; // Clear existing grid
-  grid.style.gridTemplateColumns = `repeat(${cols}, 50px)`;
-  grid.style.gridTemplateRows = `repeat(${rows}, 50px)`;
+  grid.style.gridTemplateColumns = `repeat(${cols}, 70px)`;
+  grid.style.gridTemplateRows = `repeat(${rows}, 70px)`;
 
   for (let i = 0; i < rows; i++) {
     for (let j = 0; j < cols; j++) {
