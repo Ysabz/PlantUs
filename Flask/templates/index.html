@@ -22,6 +22,9 @@
   <link href="../static/styles/style.css" rel='stylesheet' type='text/css' media="all">
   <!--//stylesheets-->
   <style>
+    body {
+      background-color:#e8cfa6;
+    }
     .cell .red-overlay {
   position: absolute;
   top: 0;
@@ -34,13 +37,13 @@
 }
 
    /* Field View Container */
-#field-view {
+#field-view,.blog_w3ls{
   margin: 20px auto;
   padding: 20px;
   max-width: 800px;
   border: none !important;
   border-radius: 15px;
-  background-color: #6c926c;
+  background-color: #7ca45c;
   color: rgb(255, 255, 255);
 }
 
@@ -88,6 +91,65 @@
   z-index: 2; /* Plant image is above the soil image */
   object-fit: contain; /* Ensure the plant image fits inside the cell */
   background-color: transparent; /* Ensure plant image background is transparent */
+
+}
+.garden-planner-heading {
+    color: white;
+    font-size: 2.2em;
+    text-align: center;
+  }
+  /* Custom styles for the file input and button */
+#test .btn-primary {
+  background-color: #28a745; /* Green color */
+  border-color: #28a745;
+  font-size: 1.1em;
+  padding: 10px 20px;
+  transition: background-color 0.3s ease;
+}
+
+#test .btn-primary:hover {
+  background-color: #218838; /* Darker green on hover */
+  border-color: #1e7e34;
+}
+
+#test .btn-success {
+  background-color: #007bff; /* Blue color */
+  border-color: #007bff;
+  font-size: 1.1em;
+  padding: 10px 20px;
+  transition: background-color 0.3s ease;
+}
+
+#test .btn-success:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+  border-color: #004085;
+}
+
+#test .bg-light {
+  background-color: #f8f9fa !important; /* Light background for the form */
+}
+
+#test .rounded {
+  border-radius: 10px !important; /* Rounded corners */
+}
+
+#test .shadow {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+#test .garden-planner-heading {
+  color: white;
+  font-size: 2.2em;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#test #imagePreview {
+  display: none; /* Hide initially */
+}
+
+#test #imagePreview img {
+  border: 2px solid #ddd; /* Border for the preview image */
 }
   </style>
 </head>
@@ -124,11 +186,11 @@
     </div>
   </div>
   <!-- //banner -->
-  ...
     <!-- Field View Section -->
     <section id="field-view">
-      <h3 class="mb-2 text-center">Garden Planner</h3>
       <div class="controls">
+        <h4 class="mb-2 garden-planner-heading">Garden Planner</h4>
+
         <button id="add-row">Add Row</button>
         <button id="add-col">Add Column</button>
         <select id="plant-select">
@@ -183,21 +245,30 @@
     </div>
   </div>
 </div>
-<section class="blog_w3ls py-3 pb-5 pt-10" id="test">
+<!-- Test Your Plants Section -->
+<section class="blog_w3ls py-5" id="test">
   <div class="container pb-xl-5 pb-lg-3">
-    <h3 class="title text-center mb-lg-5 mb-md-4 mb-sm-4 mb-3"> Test Your Plants</h3>
-    <div class="row" style="justify-content: center;">
-      <form id="predictForm" enctype="multipart/form-data">
-        <div class="form-group text-center">
-          <label for="exampleFormControlFile1"><b>Input a file</b></label>
-          <input type="file" name="file" class="form-control-file" id="inputImage" onchange="previewImage(event)" required>
-          <br />
-          <button class="btn btn-primary" type="submit"> Predict </button>
-        </div>
-      </form>
+    <h4 class="garden-planner-heading">Test Your Plants</h4>
+    <div class="row justify-content-center">
+      <div class="col-md-6 text-center">
+        <form id="predictForm" enctype="multipart/form-data" class="p-4 bg-light rounded shadow">
+          <div class="form-group">
+            <label for="inputImage" class="btn btn-primary btn-block">
+              <i class="fa fa-upload mr-2"></i> Choose File
+              <input type="file" name="file" id="inputImage" onchange="previewImage(event)" style="display: none;" required>
+            </label>
+          </div>
+          <div class="form-group">
+            <button class="btn btn-success btn-block" type="submit">
+              <i class="fa fa-magic mr-2"></i> Predict
+            </button>
+          </div>
+          <div id="imagePreview" class="mt-3">
+            <img id="output-image" class="img-fluid rounded" style="max-height: 200px;" />
+          </div>
+        </form>
+      </div>
     </div>
-    <img id="output-image" class="rounded mx-auto d-block" />
-    <br />
   </div>
 </section>
 
@@ -390,6 +461,23 @@
     
       // Initialize grid
       createGrid();
+      function previewImage(event) {
+  const outputImage = document.getElementById('output-image');
+  const imagePreview = document.getElementById('imagePreview');
+  const file = event.target.files[0];
+
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      outputImage.src = e.target.result;
+      imagePreview.style.display = 'block'; // Show the preview
+    };
+    reader.readAsDataURL(file);
+  } else {
+    outputImage.src = '';
+    imagePreview.style.display = 'none'; // Hide the preview if no file is selected
+  }
+}
     </script>
 </body>
 
