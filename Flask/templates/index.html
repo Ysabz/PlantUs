@@ -169,6 +169,7 @@
           <li class="active"><a href="#home">Home</a></li>
           <li><a href="#field-view">Garden</a></li>
           <li><a href="#test">Test</a></li>
+          <li><a id="increment-item" href="#new-section"><img src="../static/images/tomato.png" alt="X 0" style="width: 60px; height: 60px;"> X <span id="increment-value">0</span></a></li>
         </ul>
       </nav>
       <!-- //nav -->
@@ -302,6 +303,14 @@
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
     <script>
+
+    // Function to increment the value
+    function incrementValue() {
+    const valueElement = document.getElementById('increment-value');
+    let currentValue = parseInt(valueElement.textContent);
+    currentValue++;
+    valueElement.textContent = currentValue;
+  }
       // Add a red transparent layer to the first grid cell when the modal is closed
       $('#resultModal').on('hidden.bs.modal', function () {
         const firstCell = document.querySelector('#grid .cell:first-child');
@@ -348,9 +357,8 @@
     
       // Handle action button click
       document.getElementById('actionButton').addEventListener('click', function() {
-        // Define the action to take
-        alert('Action button clicked!');
-        // You can add more code here to perform the desired action
+      // Call incrementValue after 5 seconds
+      setTimeout(incrementValue, 5000);
       });
     
       // Field View Script
