@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Plant AI</title>
+  <title>PlantUs</title>
   <!--meta tags -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -144,7 +144,25 @@
       <div id="grid"></div>
     </section>
     <!-- //Field View Section -->
-
+<!-- Modal Structure for Plant Info -->
+<div class="modal fade" id="plantInfoModal" tabindex="-1" role="dialog" aria-labelledby="plantInfoModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="plantInfoModalLabel">Plant Information</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="plantInfoContent">
+        <!-- Plant information will be displayed here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- Modal Structure -->
 <div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -212,154 +230,167 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
-
-  <script>
- // Add a red transparent layer to the first grid cell when the modal is closed
- $('#resultModal').on('hidden.bs.modal', function () {
-    const firstCell = document.querySelector('#grid .cell:first-child');
-    if (firstCell) {
-      // Create a red overlay div
-      const overlay = document.createElement('div');
-      overlay.style.position = 'absolute';
-      overlay.style.top = '0';
-      overlay.style.left = '0';
-      overlay.style.width = '100%';
-      overlay.style.height = '100%';
-      overlay.style.backgroundColor = 'rgba(255, 0, 0, 0.5)'; // Red with transparency
-      overlay.style.zIndex = '3'; // Ensure it's on top
-
-      // Add the overlay to the cell
-      firstCell.appendChild(overlay);
-    }
-  });
-  // Handle form submission
-  document.getElementById('predictForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const formData = new FormData(this);
-
-    fetch("{{ url_for('predict') }}", {
-      method: 'POST',
-      body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.status === 200) {
-        // Display result in modal
-        document.getElementById('resultContent').innerHTML = data.result;
-        $('#resultModal').modal('show');
-      } else {
-        alert(data.result);
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alert('An error occurred while processing your request.');
-    });
-  });
-
-  // Handle action button click
-  document.getElementById('actionButton').addEventListener('click', function() {
-    // Define the action to take
-    alert('Action button clicked!');
-    // You can add more code here to perform the desired action
-  });
-
-    // Field View Script
-    const grid = document.getElementById('grid');
-    const addRowButton = document.getElementById('add-row');
-    const addColButton = document.getElementById('add-col');
-    const plantSelect = document.getElementById('plant-select');
-    const plantImages = {
-  tomato: "../static/images/tomato.png",
-  carrot: "../static/images/carrot.png",
-  wheat: "../static/images/wheat.png",
-  corn: "../static/images/corn.png",
-  flower: "../static/images/flower.png",
-  apple: "../static/images/apple.png",
-};
-const initialGridState = [
-  ['wheat', null, 'tomato', null, 'wheat',null],
-  ['corn', null, 'flower', null, 'apple', null],
-  [null, 'tomato', null, 'carrot', null, 'wheat'],
-  ['corn', null, 'flower', null, 'apple', null],
-  [null, 'tomato', null, 'carrot', null, 'wheat'],
-  ['corn', null, 'flower', null, 'apple', null]
-];
-let gridState = initialGridState;
-let rows = initialGridState.length;
-let cols = initialGridState[0].length;
-
-    // Function to create the grid
-// Soil image path
-const soilImage = "../static/images/soil.png";
-
-// Function to create the grid
-function createGrid() {
-  grid.innerHTML = ''; // Clear existing grid
-  grid.style.gridTemplateColumns = `repeat(${cols}, 70px)`;
-  grid.style.gridTemplateRows = `repeat(${rows}, 70px)`;
-
-  for (let i = 0; i < rows; i++) {
-    for (let j = 0; j < cols; j++) {
-      const cell = document.createElement('div');
-      cell.classList.add('cell');
-      cell.dataset.row = i;
-      cell.dataset.col = j;
-
-      // Add soil image to the cell
-      const soilImg = document.createElement('img');
-      soilImg.src = soilImage;
-      soilImg.alt = "soil";
-      soilImg.classList.add('soil');
-      cell.appendChild(soilImg);
-
-      // Add plant image placeholder
-      const plantImg = document.createElement('img');
-      plantImg.classList.add('plant');
-
-      // If the cell has a plant, set its image
-      if (gridState[i][j]) {
-        plantImg.src = plantImages[gridState[i][j]];
-        plantImg.alt = gridState[i][j];
-      }
-
-      cell.appendChild(plantImg);
-
-      // Add click event to place the plant
-      cell.addEventListener('click', () => {
-        const selectedPlant = plantSelect.value;
-        if (selectedPlant && plantImages[selectedPlant]) {
-          plantImg.src = plantImages[selectedPlant];
-          plantImg.alt = selectedPlant;
-          gridState[i][j] = selectedPlant; // Update the grid state
-          cell.classList.add('planted');
+    <script>
+      // Add a red transparent layer to the first grid cell when the modal is closed
+      $('#resultModal').on('hidden.bs.modal', function () {
+        const firstCell = document.querySelector('#grid .cell:first-child');
+        if (firstCell) {
+          // Create a red overlay div
+          const overlay = document.createElement('div');
+          overlay.style.position = 'absolute';
+          overlay.style.top = '0';
+          overlay.style.left = '0';
+          overlay.style.width = '100%';
+          overlay.style.height = '100%';
+          overlay.style.backgroundColor = 'rgba(255, 0, 0, 0.5)'; // Red with transparency
+          overlay.style.zIndex = '3'; // Ensure it's on top
+    
+          // Add the overlay to the cell
+          firstCell.appendChild(overlay);
         }
       });
-
-      grid.appendChild(cell);
-    }
-  }
-}
-// Add row
-addRowButton.addEventListener('click', () => {
-  rows++;
-  // Add a new row to the grid state
-  gridState.push(Array(cols).fill(null));
-  createGrid();
-});
-
-// Add column
-addColButton.addEventListener('click', () => {
-  cols++;
-  // Add a new column to each row in the grid state
-  gridState = gridState.map(row => [...row, null]);
-  createGrid();
-});
-
-// Initialize grid
-createGrid();
-
-</script>
+    
+      // Handle form submission
+      document.getElementById('predictForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+    
+        fetch("{{ url_for('predict') }}", {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 200) {
+            // Display result in modal
+            document.getElementById('resultContent').innerHTML = data.result;
+            $('#resultModal').modal('show');
+          } else {
+            alert(data.result);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('An error occurred while processing your request.');
+        });
+      });
+    
+      // Handle action button click
+      document.getElementById('actionButton').addEventListener('click', function() {
+        // Define the action to take
+        alert('Action button clicked!');
+        // You can add more code here to perform the desired action
+      });
+    
+      // Field View Script
+      const grid = document.getElementById('grid');
+      const addRowButton = document.getElementById('add-row');
+      const addColButton = document.getElementById('add-col');
+      const plantSelect = document.getElementById('plant-select');
+      const plantImages = {
+        tomato: "../static/images/tomato.png",
+        carrot: "../static/images/carrot.png",
+        wheat: "../static/images/wheat.png",
+        corn: "../static/images/corn.png",
+        flower: "../static/images/flower.png",
+        apple: "../static/images/apple.png",
+      };
+      const plantInfo = {
+        tomato: "Tomato: A red, juicy fruit often used in salads and cooking.",
+        carrot: "Carrot: An orange root vegetable that is crunchy and sweet.",
+        wheat: "Wheat: A cereal grain used to make flour for bread, pasta, and more.",
+        corn: "Corn: A yellow grain that is a staple food in many parts of the world.",
+        flower: "Flower: A beautiful plant part that is often colorful and fragrant.",
+        apple: "Apple: A sweet, edible fruit that comes in many varieties."
+      };
+      const initialGridState = [
+        ['wheat', null, 'tomato', null, 'wheat',null],
+        ['corn', null, 'flower', null, 'apple', null],
+        [null, 'tomato', null, 'carrot', null, 'wheat'],
+        ['corn', null, 'flower', null, 'apple', null],
+        [null, 'tomato', null, 'carrot', null, 'wheat'],
+        ['corn', null, 'flower', null, 'apple', null]
+      ];
+      let gridState = initialGridState;
+      let rows = initialGridState.length;
+      let cols = initialGridState[0].length;
+    
+      // Soil image path
+      const soilImage = "../static/images/soil.png";
+    
+      // Function to create the grid
+      function createGrid() {
+        grid.innerHTML = ''; // Clear existing grid
+        grid.style.gridTemplateColumns = `repeat(${cols}, 70px)`;
+        grid.style.gridTemplateRows = `repeat(${rows}, 70px)`;
+    
+        for (let i = 0; i < rows; i++) {
+          for (let j = 0; j < cols; j++) {
+            const cell = document.createElement('div');
+            cell.classList.add('cell');
+            cell.dataset.row = i;
+            cell.dataset.col = j;
+    
+            // Add soil image to the cell
+            const soilImg = document.createElement('img');
+            soilImg.src = soilImage;
+            soilImg.alt = "soil";
+            soilImg.classList.add('soil');
+            cell.appendChild(soilImg);
+    
+            // Add plant image placeholder
+            const plantImg = document.createElement('img');
+            plantImg.classList.add('plant');
+    
+            // If the cell has a plant, set its image
+            if (gridState[i][j]) {
+              plantImg.src = plantImages[gridState[i][j]];
+              plantImg.alt = gridState[i][j];
+            }
+    
+            cell.appendChild(plantImg);
+    
+            // Add click event to place the plant
+            cell.addEventListener('click', () => {
+              if (gridState[i][j]) {
+                // Show plant info modal if the cell already has a plant
+                document.getElementById('plantInfoContent').innerText = plantInfo[gridState[i][j]];
+                $('#plantInfoModal').modal('show');
+              } else {
+                const selectedPlant = plantSelect.value;
+                if (selectedPlant && plantImages[selectedPlant]) {
+                  plantImg.src = plantImages[selectedPlant];
+                  plantImg.alt = selectedPlant;
+                  gridState[i][j] = selectedPlant; // Update the grid state
+                  cell.classList.add('planted');
+                }
+              }
+            });
+    
+            grid.appendChild(cell);
+          }
+        }
+      }
+    
+      // Add row
+      addRowButton.addEventListener('click', () => {
+        rows++;
+        // Add a new row to the grid state
+        gridState.push(Array(cols).fill(null));
+        createGrid();
+      });
+    
+      // Add column
+      addColButton.addEventListener('click', () => {
+        cols++;
+        // Add a new column to each row in the grid state
+        gridState = gridState.map(row => [...row, null]);
+        createGrid();
+      });
+    
+      // Initialize grid
+      createGrid();
+    </script>
 </body>
 
 </html>
