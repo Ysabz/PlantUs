@@ -320,12 +320,22 @@
   flower: "../static/images/flower.png",
   apple: "../static/images/apple.png",
 };
-    let rows = 1;
-    let cols = 1;
+const initialGridState = [
+  [null, 'tomato', null, 'carrot', null, 'wheat'],
+  ['corn', null, 'flower', null, 'apple', null],
+  [null, 'tomato', null, 'carrot', null, 'wheat'],
+  ['corn', null, 'flower', null, 'apple', null],
+  [null, 'tomato', null, 'carrot', null, 'wheat'],
+  ['corn', null, 'flower', null, 'apple', null]
+];
+let gridState = initialGridState;
+let rows = initialGridState.length;
+let cols = initialGridState[0].length;
 
     // Function to create the grid
 // Soil image path
 const soilImage = "../static/images/soil.jpg";
+// 2D array to store the state of the grid
 
 // Function to create the grid
 function createGrid() {
@@ -350,6 +360,13 @@ function createGrid() {
       // Add plant image placeholder
       const plantImg = document.createElement('img');
       plantImg.classList.add('plant');
+
+      // If the cell has a plant, set its image
+      if (gridState[i][j]) {
+        plantImg.src = plantImages[gridState[i][j]];
+        plantImg.alt = gridState[i][j];
+      }
+
       cell.appendChild(plantImg);
 
       // Add click event to place the plant
@@ -358,6 +375,7 @@ function createGrid() {
         if (selectedPlant && plantImages[selectedPlant]) {
           plantImg.src = plantImages[selectedPlant];
           plantImg.alt = selectedPlant;
+          gridState[i][j] = selectedPlant; // Update the grid state
           cell.classList.add('planted');
         }
       });
@@ -366,21 +384,24 @@ function createGrid() {
     }
   }
 }
+// Add row
+addRowButton.addEventListener('click', () => {
+  rows++;
+  // Add a new row to the grid state
+  gridState.push(Array(cols).fill(null));
+  createGrid();
+});
 
-    // Add row
-    addRowButton.addEventListener('click', () => {
-      rows++;
-      createGrid();
-    });
+// Add column
+addColButton.addEventListener('click', () => {
+  cols++;
+  // Add a new column to each row in the grid state
+  gridState = gridState.map(row => [...row, null]);
+  createGrid();
+});
 
-    // Add column
-    addColButton.addEventListener('click', () => {
-      cols++;
-      createGrid();
-    });
-
-    // Initialize grid
-    createGrid();
+// Initialize grid
+createGrid();
 
 </script>
 </body>
