@@ -403,4 +403,69 @@ pest_dic = {
         <br/>2. <b>Soapy Water</b>: Mix mild dish soap with water and spray directly on aphids to suffocate them.
         <br/>3. <b>Companion Planting</b>: Grow garlic, onions, or marigolds near crops to repel aphids.
         <br/>4. <b>Chemical Control</b>: If infestation is severe, use insecticidal soaps, pyrethrin, or horticultural oils."""
+
+}
+# utils.py
+
+plant_care_info = {
+    "tomato": {
+        "name": "Tomato",
+        "description": "A red, juicy fruit often used in salads and cooking.",
+        "care": {
+            "watering": "Water deeply once a week, ensuring the soil is moist but not waterlogged.",
+            "sunlight": "Requires at least 6-8 hours of direct sunlight daily.",
+            "soil": "Well-draining, fertile soil with a pH of 6.0-7.0.",
+            "fertilizer": "Use a balanced fertilizer every 2-3 weeks during the growing season.",
+        },
+    },
+    "carrot": {
+        "name": "Carrot",
+        "description": "An orange root vegetable that is crunchy and sweet.",
+        "care": {
+            "watering": "Keep the soil consistently moist but not soggy.",
+            "sunlight": "Requires full sun (6-8 hours daily).",
+            "soil": "Loose, sandy soil free of rocks and debris.",
+            "fertilizer": "Use a low-nitrogen fertilizer to promote root growth.",
+        },
+    },
+    "wheat": {
+        "name": "Wheat",
+        "description": "A cereal grain used to make flour for bread, pasta, and more.",
+        "care": {
+            "watering": "Water regularly, especially during dry spells.",
+            "sunlight": "Requires full sun (6-8 hours daily).",
+            "soil": "Well-draining loamy soil with a pH of 6.0-7.5.",
+            "fertilizer": "Apply nitrogen-rich fertilizer during the growing season.",
+        },
+    },
+    "corn": {
+        "name": "Corn",
+        "description": "A yellow grain that is a staple food in many parts of the world.",
+        "care": {
+            "watering": "Water deeply once a week, especially during tasseling and ear development.",
+            "sunlight": "Requires full sun (6-8 hours daily).",
+            "soil": "Rich, well-draining soil with a pH of 5.8-7.0.",
+            "fertilizer": "Use a balanced fertilizer at planting and during growth stages.",
+        },
+    },
+    "flower": {
+        "name": "Flower",
+        "description": "A beautiful plant part that is often colorful and fragrant.",
+        "care": {
+            "watering": "Water regularly, keeping the soil moist but not waterlogged.",
+            "sunlight": "Depends on the flower type; most require 4-6 hours of sunlight.",
+            "soil": "Well-draining soil rich in organic matter.",
+            "fertilizer": "Use a balanced fertilizer every 4-6 weeks during the growing season.",
+        },
+    },
+    "apple": {
+        "name": "Apple",
+        "description": "A sweet, edible fruit that comes in many varieties.",
+        "care": {
+            "watering": "Water deeply once a week, especially during dry periods.",
+            "sunlight": "Requires full sun (6-8 hours daily).",
+            "soil": "Well-draining, loamy soil with a pH of 6.0-7.0.",
+            "fertilizer": "Use a balanced fertilizer in early spring and late fall.",
+        },
+    },
 }
