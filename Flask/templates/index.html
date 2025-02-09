@@ -176,27 +176,43 @@
       </div>
     </div>
   </section>
-
-
-  <section class="blog_w3ls py-3 pb-5 pt-10" id="test">
-    <div class="container pb-xl-5 pb-lg-3">
-      <h3 class="title text-center mb-lg-5 mb-md-4 mb-sm-4 mb-3"> Test Your Plants</h3>
-      <div class="row" style="justify-content: center;">
-        <form action="{{ url_for('predict') }}" method="POST" enctype=multipart/form-data>
-          <div class="form-group text-center">
-            <label for="exampleFormControlFile1"><b>Input a file</b></label>
-            <input type="file" name="file" class="form-control-file" id="inputImage" onchange=previewImage(event)
-              required>
-            <br />
-            <button class="btn btn-primary" type="submit"> Predict </button>
-          </div>
-        </form>
+<!-- Modal Structure -->
+<div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="resultModalLabel">Prediction Result</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <img id="output-image" class="rounded mx-auto d-block" />
-      <br />
+      <div class="modal-body" id="resultContent">
+        <!-- Result will be displayed here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="actionButton">Take Action</button>
+      </div>
     </div>
-
-  </section>
+  </div>
+</div>
+<section class="blog_w3ls py-3 pb-5 pt-10" id="test">
+  <div class="container pb-xl-5 pb-lg-3">
+    <h3 class="title text-center mb-lg-5 mb-md-4 mb-sm-4 mb-3"> Test Your Plants</h3>
+    <div class="row" style="justify-content: center;">
+      <form id="predictForm" enctype="multipart/form-data">
+        <div class="form-group text-center">
+          <label for="exampleFormControlFile1"><b>Input a file</b></label>
+          <input type="file" name="file" class="form-control-file" id="inputImage" onchange="previewImage(event)" required>
+          <br />
+          <button class="btn btn-primary" type="submit"> Predict </button>
+        </div>
+      </form>
+    </div>
+    <img id="output-image" class="rounded mx-auto d-block" />
+    <br />
+  </div>
+</section>
 
   <!-- footer -->
   <footer>
@@ -229,6 +245,39 @@
     crossorigin="anonymous"></script>
 
   <script>
+
+  // Handle form submission
+  document.getElementById('predictForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const formData = new FormData(this);
+
+    fetch("{{ url_for('predict') }}", {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 200) {
+        // Display result in modal
+        document.getElementById('resultContent').innerHTML = data.result;
+        $('#resultModal').modal('show');
+      } else {
+        alert(data.result);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('An error occurred while processing your request.');
+    });
+  });
+
+  // Handle action button click
+  document.getElementById('actionButton').addEventListener('click', function() {
+    // Define the action to take
+    alert('Action button clicked!');
+    // You can add more code here to perform the desired action
+  });
+
     // Field View Script
     const grid = document.getElementById('grid');
     const addRowButton = document.getElementById('add-row');
