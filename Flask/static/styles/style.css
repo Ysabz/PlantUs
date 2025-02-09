@@ -469,8 +469,8 @@ background-color: #212121;
 /* banner */
 
 .main-top {
-  background: linear-gradient(rgba(46, 46, 46, 0.493), rgba(27, 27, 27, 0.466)),
-    url(../images/b7.jpg) no-repeat bottom;
+  background: linear-gradient(rgba(46, 46, 46, 0.089), rgba(27, 27, 27, 0.171)),
+    url(../images/back.gif) no-repeat bottom;
   background-size: cover;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -535,7 +535,7 @@ button.btn1:hover,
 /*--inner-banner -- */
 .inner_page-banner {
   text-align: center;
-  background: url(../images/b7.jpg) no-repeat center;
+  background: url(../images/back.gif) no-repeat center;
   background-size: cover;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -1218,21 +1218,4 @@ a.move-top {
   .newsletter input[type="email"] {
     width: 100%;
   }
-  .field-grid {
-    display: grid;
-    gap: 10px; /* Space between cells */
-  }
-
-  .field-cell {
-    border: 1px solid #ccc;
-    padding: 10px;
-    text-align: center;
-    background-color: #f9f9f9;
-    border-radius: 5px;
-  }
-
-  select {
-    width: 100%;
-  }
-
 }
