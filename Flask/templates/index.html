@@ -304,6 +304,9 @@
     crossorigin="anonymous"></script>
     <script>
 
+    // Define the action_taken variable
+    let action_taken = false;
+
     // Function to increment the value
     function incrementValue() {
     const valueElement = document.getElementById('increment-value');
@@ -339,9 +342,16 @@
     }
   }
 
+  // Set action_taken to false when the modal is opened
+  $('#resultModal').on('show.bs.modal', function () {
+    action_taken = false;
+  });
+
   // Add a red transparent layer to the first grid cell when the modal is closed
   $('#resultModal').on('hidden.bs.modal', function () {
-    addOverlay();
+    if (!action_taken) {
+      addOverlay();
+    }
   });
     
       // Handle form submission
@@ -371,10 +381,13 @@
     
       // Handle action button click
       document.getElementById('actionButton').addEventListener('click', function() {
-      // Call incrementValue after 5 seconds
-      setTimeout(incrementValue, 5000);
+      action_taken = true;
       // Remove the overlay
       removeOverlay();
+      // Call incrementValue after 5 seconds
+      setTimeout(incrementValue, 5000);
+      // Close the modal
+      $('#resultModal').modal('hide');
       });
     
       // Field View Script
