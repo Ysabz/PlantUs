@@ -1218,4 +1218,21 @@ a.move-top {
   .newsletter input[type="email"] {
     width: 100%;
   }
+  .field-grid {
+    display: grid;
+    gap: 10px; /* Space between cells */
+  }
+
+  .field-cell {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+  }
+
+  select {
+    width: 100%;
+  }
+
 }

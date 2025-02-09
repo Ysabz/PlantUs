@@ -21,7 +21,62 @@
   <!--stylesheets-->
   <link href="../static/styles/style.css" rel='stylesheet' type='text/css' media="all">
   <!--//stylesheets-->
+  <style>
+   /* Field View Container */
+#field-view {
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 800px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
 
+#field-view .controls {
+  margin-bottom: 20px;
+}
+
+#field-view #grid {
+  display: grid;
+  gap: 5px;
+}
+
+/* Cell Styling */
+#field-view .cell {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative; /* Required for layering */
+  background-color: transparent; /* Ensure cell background is transparent */
+}
+
+/* Soil Image (Background) */
+#field-view .cell .soil {
+  width: 100%;
+  height: 100%;
+  position: absolute; /* Position soil image at the bottom */
+  top: 0;
+  left: 0;
+  z-index: 1; /* Soil image is below the plant image */
+  object-fit: cover; /* Ensure the soil image covers the cell */
+}
+
+/* Plant Image (Foreground) */
+#field-view .cell .plant {
+  width: 100%;
+  height: 100%;
+  position: absolute; /* Position plant image on top */
+  top: 0;
+  left: 0;
+  z-index: 2; /* Plant image is above the soil image */
+  object-fit: contain; /* Ensure the plant image fits inside the cell */
+  background-color: transparent; /* Ensure plant image background is transparent */
+}
+  </style>
 </head>
 
 <body>
@@ -85,6 +140,28 @@
       </div>
     </div>
   </section>
+
+  ...
+    <!-- Field View Section -->
+    <section id="field-view">
+      <h3 class="title text-center mb-3">Garden Planner</h3>
+      <div class="controls">
+        <button id="add-row">Add Row</button>
+        <button id="add-col">Add Column</button>
+        <select id="plant-select">
+          <option value="">Select a Plant</option>
+          <option value="tomato">Tomato</option>
+          <option value="carrot">Carrot</option>
+          <option value="wheat">Wheat</option>
+          <option value="flower">Flower</option>
+          <option value="apple">Apple</option>
+          <option value="corn">Corn</option>
+        </select>
+      </div>
+      <div id="grid"></div>
+    </section>
+    <!-- //Field View Section -->
+
   <!-- //about -->
 
   <!-- service -->
@@ -181,15 +258,82 @@
     crossorigin="anonymous"></script>
 
   <script>
-    function previewImage(event) {
-      var reader = new FileReader();
-      reader.onload = function () {
-        var output = document.getElementById('output-image')
-        output.src = reader.result;
-      }
-      reader.readAsDataURL(event.target.files[0]);
+    // Field View Script
+    const grid = document.getElementById('grid');
+    const addRowButton = document.getElementById('add-row');
+    const addColButton = document.getElementById('add-col');
+    const plantSelect = document.getElementById('plant-select');
+    const plantImages = {
+  tomato: "../static/images/tomato.png",
+  carrot: "../static/images/carrot.png",
+  wheat: "../static/images/wheat.png",
+  corn: "../static/images/corn.png",
+  flower: "../static/images/flower.png",
+  apple: "../static/images/apple.png",
+};
+    let rows = 1;
+    let cols = 1;
+
+    // Function to create the grid
+// Soil image path
+const soilImage = "../static/images/soil.jpg";
+
+// Function to create the grid
+function createGrid() {
+  grid.innerHTML = ''; // Clear existing grid
+  grid.style.gridTemplateColumns = `repeat(${cols}, 50px)`;
+  grid.style.gridTemplateRows = `repeat(${rows}, 50px)`;
+
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols; j++) {
+      const cell = document.createElement('div');
+      cell.classList.add('cell');
+      cell.dataset.row = i;
+      cell.dataset.col = j;
+
+      // Add soil image to the cell
+      const soilImg = document.createElement('img');
+      soilImg.src = soilImage;
+      soilImg.alt = "soil";
+      soilImg.classList.add('soil');
+      cell.appendChild(soilImg);
+
+      // Add plant image placeholder
+      const plantImg = document.createElement('img');
+      plantImg.classList.add('plant');
+      cell.appendChild(plantImg);
+
+      // Add click event to place the plant
+      cell.addEventListener('click', () => {
+        const selectedPlant = plantSelect.value;
+        if (selectedPlant && plantImages[selectedPlant]) {
+          plantImg.src = plantImages[selectedPlant];
+          plantImg.alt = selectedPlant;
+          cell.classList.add('planted');
+        }
+      });
+
+      grid.appendChild(cell);
     }
-  </script>
+  }
+}
+
+    // Add row
+    addRowButton.addEventListener('click', () => {
+      rows++;
+      createGrid();
+    });
+
+    // Add column
+    addColButton.addEventListener('click', () => {
+      cols++;
+      createGrid();
+    });
+
+    // Initialize grid
+    createGrid();
+
+</script>
 </body>
 
 </html>
