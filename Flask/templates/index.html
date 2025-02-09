@@ -456,14 +456,69 @@
         flower: "../static/images/flower.png",
         apple: "../static/images/apple.png",
       };
-      const plantInfo = {
-        tomato: "Tomato: A red, juicy fruit often used in salads and cooking.",
-        carrot: "Carrot: An orange root vegetable that is crunchy and sweet.",
-        wheat: "Wheat: A cereal grain used to make flour for bread, pasta, and more.",
-        corn: "Corn: A yellow grain that is a staple food in many parts of the world.",
-        flower: "Flower: A beautiful plant part that is often colorful and fragrant.",
-        apple: "Apple: A sweet, edible fruit that comes in many varieties."
-      };
+      const plantInfo = [
+    {
+        name: "Tomato",
+        description: "A red, juicy fruit often used in salads and cooking.",
+        care: {
+            watering: "Water deeply once a week, ensuring the soil is moist but not waterlogged.",
+            sunlight: "Requires at least 6-8 hours of direct sunlight daily.",
+            soil: "Well-draining, fertile soil with a pH of 6.0-7.0.",
+            fertilizer: "Use a balanced fertilizer every 2-3 weeks during the growing season.",
+        },
+    },
+    {
+        name: "Carrot",
+        description: "An orange root vegetable that is crunchy and sweet.",
+        care: {
+            watering: "Keep the soil consistently moist but not soggy.",
+            sunlight: "Requires full sun (6-8 hours daily).",
+            soil: "Loose, sandy soil free of rocks and debris.",
+            fertilizer: "Use a low-nitrogen fertilizer to promote root growth.",
+        },
+    },
+    {
+        name: "Wheat",
+        description: "A cereal grain used to make flour for bread, pasta, and more.",
+        care: {
+            watering: "Water regularly, especially during dry spells.",
+            sunlight: "Requires full sun (6-8 hours daily).",
+            soil: "Well-draining loamy soil with a pH of 6.0-7.5.",
+            fertilizer: "Apply nitrogen-rich fertilizer during the growing season.",
+        },
+    },
+    {
+        name: "Corn",
+        description: "A yellow grain that is a staple food in many parts of the world.",
+        care: {
+            watering: "Water deeply once a week, especially during tasseling and ear development.",
+            sunlight: "Requires full sun (6-8 hours daily).",
+            soil: "Rich, well-draining soil with a pH of 5.8-7.0.",
+            fertilizer: "Use a balanced fertilizer at planting and during growth stages.",
+        },
+    },
+    {
+        name: "Flower",
+        description: "A beautiful plant part that is often colorful and fragrant.",
+        care: {
+            watering: "Water regularly, keeping the soil moist but not waterlogged.",
+            sunlight: "Depends on the flower type; most require 4-6 hours of sunlight.",
+            soil: "Well-draining soil rich in organic matter.",
+            fertilizer: "Use a balanced fertilizer every 4-6 weeks during the growing season.",
+        },
+    },
+    {
+        name: "Apple",
+        description: "A sweet, edible fruit that comes in many varieties.",
+        care: {
+            watering: "Water deeply once a week, especially during dry periods.",
+            sunlight: "Requires full sun (6-8 hours daily).",
+            soil: "Well-draining, loamy soil with a pH of 6.0-7.0.",
+            fertilizer: "Use a balanced fertilizer in early spring and late fall.",
+        },
+    },
+];
+
       const initialGridState = [
         ['wheat', null, 'tomato', null, 'wheat',null],
         ['corn', null, 'flower', null, 'apple', null],
@@ -513,20 +568,35 @@
     
             // Add click event to place the plant
             cell.addEventListener('click', () => {
-              if (gridState[i][j]) {
-                // Show plant info modal if the cell already has a plant
-                document.getElementById('plantInfoContent').innerText = plantInfo[gridState[i][j]];
-                $('#plantInfoModal').modal('show');
-              } else {
-                const selectedPlant = plantSelect.value;
-                if (selectedPlant && plantImages[selectedPlant]) {
-                  plantImg.src = plantImages[selectedPlant];
-                  plantImg.alt = selectedPlant;
-                  gridState[i][j] = selectedPlant; // Update the grid state
-                  cell.classList.add('planted');
-                }
-              }
-            });
+  if (gridState[i][j]) {
+    // Show plant info modal if the cell already has a plant
+    const plant = plantInfo.find(p => p.name.toLowerCase() === gridState[i][j]);
+    if (plant) {
+      document.getElementById('plantInfoContent').innerHTML = `
+        <h5><strong>${plant.name}</strong></h5>
+        <p>${plant.description}</p>
+        <h6>Care Instructions:</h6>
+        <ul>
+          <li><strong>Watering:</strong> ${plant.care.watering}</li>
+          <li><strong>Sunlight:</strong> ${plant.care.sunlight}</li>
+          <li><strong>Soil:</strong> ${plant.care.soil}</li>
+          <li><strong>Fertilizer:</strong> ${plant.care.fertilizer}</li>
+        </ul>
+      `;
+      $('#plantInfoModal').modal('show');
+    }
+  } else {
+    const selectedPlant = plantSelect.value;
+    if (selectedPlant && plantImages[selectedPlant]) {
+      plantImg.src = plantImages[selectedPlant];
+      plantImg.alt = selectedPlant;
+      gridState[i][j] = selectedPlant; // Update the grid state
+      cell.classList.add('planted');
+    }
+  }
+});
+
+grid.appendChild(cell);
     
             grid.appendChild(cell);
           }
