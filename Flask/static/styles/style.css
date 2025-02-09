@@ -75,6 +75,36 @@ input[type="submit"] {
   border-color: #4c5732; /* Darker shade for hover effect */
 }
 
+.water-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.water-row span {
+  margin-right: 10px;
+}
+
+.circle {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.water-circle {
+  background-color: #007bff; /* Blue color for water circles */
+}
+
+.soil-circle {
+  background-color: #562f12; /* Brown color for soil circles */
+}
+
+.health-circle {
+  background-color: #46d02a; /* Green color for health circles */
+}
+
 select,
 input[type="email"],
 input[type="text"],
