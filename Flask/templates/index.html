@@ -151,6 +151,10 @@
 #test #imagePreview img {
   border: 2px solid #ddd; /* Border for the preview image */
 }
+.fade-out {
+    transition: opacity 8s ease-out;
+    opacity: 0;
+  }
   </style>
 </head>
 
@@ -207,6 +211,27 @@
       <div id="grid"></div>
     </section>
     <!-- //Field View Section -->
+     <!-- New Modal for Health Restored Message -->
+  <div class="modal fade" id="healthRestoredModal" tabindex="-1" role="dialog" aria-labelledby="healthRestoredModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="healthRestoredModalLabel">Health Restored</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        The health of the plant has been restored! You have earned a point.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Modal Structure for Plant Info -->
 <div class="modal fade" id="plantInfoModal" tabindex="-1" role="dialog" aria-labelledby="plantInfoModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -337,28 +362,36 @@
      // Function to add the overlay
   function addOverlay() {
     const firstCell = document.querySelector('#grid .cell:first-child');
-    if (firstCell) {
-      // Create a red overlay div
-      const overlay = document.createElement('div');
-      overlay.id = 'red-overlay'; // Add an id to the overlay
-      overlay.style.position = 'absolute';
-      overlay.style.top = '0';
-      overlay.style.left = '0';
-      overlay.style.width = '100%';
-      overlay.style.height = '100%';
-      overlay.style.backgroundColor = 'rgba(255, 0, 0, 0.5)'; // Red with transparency
-      overlay.style.zIndex = '3'; // Ensure it's on top
+      if (firstCell && !firstCell.querySelector('#red-overlay')) {
+        // Create a red overlay div
+        const overlay = document.createElement('div');
+        overlay.id = 'red-overlay'; // Add an id to the overlay
+        overlay.style.position = 'absolute';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.backgroundColor = 'rgba(255, 0, 0, 0.5)'; // Red with transparency
+        overlay.style.zIndex = '3'; // Ensure it's on top
 
-      // Add the overlay to the cell
-      firstCell.appendChild(overlay);
+        // Add the overlay to the cell
+        firstCell.appendChild(overlay);
     }
   }
 
-  // Function to remove the overlay
+
+  // Function to remove the overlay with fade-out effect
   function removeOverlay() {
     const overlay = document.getElementById('red-overlay');
     if (overlay) {
-      overlay.remove();
+      overlay.classList.add('fade-out');
+      // Wait for the transition to complete before removing the overlay and incrementing points
+      overlay.addEventListener('transitionend', () => {
+        overlay.remove();
+        incrementValue(); // Increment points after the fade-out effect
+        $('#healthRestoredModal').modal('show');
+
+      });
     }
   }
 
@@ -400,15 +433,15 @@
       });
     
       // Handle action button click
-      document.getElementById('actionButton').addEventListener('click', function() {
-      action_taken = true;
-      // Remove the overlay
-      removeOverlay();
-      // Call incrementValue after 5 seconds
-      setTimeout(incrementValue, 5000);
-      // Close the modal
-      $('#resultModal').modal('hide');
-      });
+    // Handle action button click
+    document.getElementById('actionButton').addEventListener('click', function() {
+    action_taken = true;
+    addOverlay();
+    // Remove the overlay with fade-out effect
+    setTimeout(removeOverlay, 100); // Adjust the delay as needed
+    // Close the modal
+    $('#resultModal').modal('hide');
+  });
     
       // Field View Script
       const grid = document.getElementById('grid');
