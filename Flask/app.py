@@ -18,20 +18,6 @@ def home():
     return render_template('index.html')
 
 
-# @app.route('/predict', methods=['GET', 'POST'])
-# def predict():
-#     if request.method == 'POST':
-#         try:
-#             file = request.files['file']
-#             img = file.read()
-#             prediction = predict_image(img)
-#             print(prediction)
-#             res = Markup(utils.disease_dic[prediction])
-#             return render_template('display.html', status=200, result=res)
-#         except:
-#             pass
-#     return render_template('index.html', status=500, res="Internal Server Error")
-
 @app.route('/predict', methods=['POST'])
 def predict():
     if request.method == 'POST':
@@ -41,11 +27,12 @@ def predict():
                 return render_template('index.html', status=400, res="No file uploaded")
 
             # Convert file to OpenCV image
-            file_bytes = np.frombuffer(file.read(), np.uint8)
-            img = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
+            img = file.read()
+            file_bytes = np.frombuffer(img, np.uint8)
+            img_cv = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
 
             # Run YOLO detection
-            results = yolo_model(img)
+            results = yolo_model(img_cv)
             # Find the class with the highest confidence
             best_class = None
             highest_conf = 0.0
@@ -67,7 +54,15 @@ def predict():
 
         except Exception as e:
             print(f"Error: {e}")
-            return render_template('index.html', status=500, res="Internal Server Error")
+            try:
+                # Fallback prediction method
+                prediction = predict_image(img)
+                print(prediction)
+                res = Markup(utils.disease_dic[prediction])
+                return render_template('display.html', status=200, result=res)
+            except Exception as fallback_error:
+                print(f"Fallback Error: {fallback_error}")
+                return render_template('index.html', status=500, res="Internal Server Error")
 
     return render_template('index.html')
 
