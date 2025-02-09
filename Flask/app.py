@@ -17,14 +17,13 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
-
 @app.route('/predict', methods=['POST'])
 def predict():
     if request.method == 'POST':
         try:
             file = request.files['file']
             if not file:
-                return render_template('index.html', status=400, res="No file uploaded")
+                return jsonify({'status': 400, 'result': "No file uploaded"})
 
             # Convert file to OpenCV image
             img = file.read()
@@ -47,10 +46,8 @@ def predict():
                         highest_conf = conf
                         best_class = class_name
             
-            res = Markup(utils.pest_dic[best_class])
-            # detected_text = f"Most likely: {best_class} (Confidence: {highest_conf:.2f})" if best_class else "No objects detected"
-            # Return detected classes as text
-            return render_template('display.html', status=200, result=res)
+            res = utils.pest_dic[best_class]
+            return jsonify({'status': 200, 'result': Markup(res)})
 
         except Exception as e:
             print(f"Error: {e}")
@@ -58,13 +55,13 @@ def predict():
                 # Fallback prediction method
                 prediction = predict_image(img)
                 print(prediction)
-                res = Markup(utils.disease_dic[prediction])
-                return render_template('display.html', status=200, result=res)
+                res = utils.disease_dic[prediction]
+                return jsonify({'status': 200, 'result': Markup(res)})
             except Exception as fallback_error:
                 print(f"Fallback Error: {fallback_error}")
-                return render_template('index.html', status=500, res="Internal Server Error")
+                return jsonify({'status': 500, 'result': "Internal Server Error"})
 
-    return render_template('index.html')
+    return jsonify({'status': 400, 'result': "Invalid request"})
 
 if __name__ == "__main__":
     app.run(debug=True)
