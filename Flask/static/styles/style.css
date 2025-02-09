@@ -46,6 +46,35 @@ input[type="submit"] {
   font-family: "Mada", sans-serif;
 }
 
+/* Custom button styles */
+.btn-custom2 {
+  background-color: #aad645; /* Change this to your desired color */
+  border-color:  #aad645; /* Change this to your desired color */
+  color: #fff; /* Text color */
+  width: 100%; /* Adjust the width as needed */
+  font-size: 20px; /* Adjust the font size as needed */
+  padding: 15px 20px; /* Adjust the padding as needed */
+}
+
+.btn-custom2:hover {
+  background-color:#586e24; /* Darker shade for hover effect */
+  border-color: #586e24; /* Darker shade for hover effect */
+}
+
+.btn-custom1 {
+  background-color: #8aa058; /* Change this to your desired color */
+  border-color:  #8aa058; /* Change this to your desired color */
+  color: #fff; /* Text color */
+  width: 100%; /* Adjust the width as needed */
+  font-size: 20px; /* Adjust the font size as needed */
+  padding: 15px 20px; /* Adjust the padding as needed */
+}
+
+.btn-custom1:hover {
+  background-color:#4c5732; /* Darker shade for hover effect */
+  border-color: #4c5732; /* Darker shade for hover effect */
+}
+
 select,
 input[type="email"],
 input[type="text"],
@@ -469,7 +498,7 @@ background-color: #212121;
 /* banner */
 
 .main-top {
-  background: linear-gradient(rgba(46, 46, 46, 0.089), rgba(27, 27, 27, 0.171)),
+  background: linear-gradient(rgba(46, 46, 46, 0.438), rgba(27, 27, 27, 0.707)),
     url(../images/back.gif) no-repeat bottom;
   background-size: cover;
   -webkit-background-size: cover;
