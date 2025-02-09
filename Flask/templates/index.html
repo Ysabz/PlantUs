@@ -22,6 +22,17 @@
   <link href="../static/styles/style.css" rel='stylesheet' type='text/css' media="all">
   <!--//stylesheets-->
   <style>
+    .cell .red-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 0, 0, 0.5); /* Red with 50% transparency */
+  z-index: 3; /* Ensure it’s above everything else */
+  display: none;
+}
+
    /* Field View Container */
 #field-view {
   margin: 20px auto;
@@ -203,7 +214,24 @@
     crossorigin="anonymous"></script>
 
   <script>
+ // Add a red transparent layer to the first grid cell when the modal is closed
+ $('#resultModal').on('hidden.bs.modal', function () {
+    const firstCell = document.querySelector('#grid .cell:first-child');
+    if (firstCell) {
+      // Create a red overlay div
+      const overlay = document.createElement('div');
+      overlay.style.position = 'absolute';
+      overlay.style.top = '0';
+      overlay.style.left = '0';
+      overlay.style.width = '100%';
+      overlay.style.height = '100%';
+      overlay.style.backgroundColor = 'rgba(255, 0, 0, 0.5)'; // Red with transparency
+      overlay.style.zIndex = '3'; // Ensure it's on top
 
+      // Add the overlay to the cell
+      firstCell.appendChild(overlay);
+    }
+  });
   // Handle form submission
   document.getElementById('predictForm').addEventListener('submit', function(event) {
     event.preventDefault();
@@ -250,7 +278,7 @@
   apple: "../static/images/apple.png",
 };
 const initialGridState = [
-  [null, 'tomato', null, 'carrot', null, 'wheat'],
+  ['wheat', null, 'tomato', null, 'wheat',null],
   ['corn', null, 'flower', null, 'apple', null],
   [null, 'tomato', null, 'carrot', null, 'wheat'],
   ['corn', null, 'flower', null, 'apple', null],
