@@ -27,7 +27,7 @@
   margin: 20px auto;
   padding: 20px;
   max-width: 800px;
-  border: 1px solid #ccc;
+  border: none !important;
   border-radius: 15px;
   background-color: #6c926c;
   color: rgb(255, 255, 255);
@@ -40,13 +40,14 @@
 #field-view #grid {
   display: grid;
   gap: 5px;
+  border: none !important;
 }
 
 /* Cell Styling */
 #field-view .cell {
   width: 50px;
   height: 50px;
-  border: 1px solid #ccc;
+  border: none !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,15 +88,14 @@
       <!-- nav -->
       <nav>
         <div id="logo">
-          <h1><a href="index.html">Plant-AI</a></h1>
+          <h1><a href="index.html">PlantUs</a></h1>
         </div>
         <label for="drop" class="toggle">Menu</label>
         <input type="checkbox" id="drop">
         <ul class="menu mt-2">
           <li class="active"><a href="#home">Home</a></li>
           <li><a href="#field-view">Garden</a></li>
-          <li><a href="#features">Features</a></li>
-          <li><a href="#test">Detect</a></li>
+          <li><a href="#test">Test</a></li>
         </ul>
       </nav>
       <!-- //nav -->
@@ -134,49 +134,6 @@
     </section>
     <!-- //Field View Section -->
 
-  <!-- //about -->
-
-  <!-- service -->
-  <section class="service pb-5 " id="features">
-    <div class="container ">
-      <h3 class="title text-center mb-3">Features</h3>
-      <div class="row">
-        <div class="col-lg-4 col-md-6 col-sm-6 mt-lg-4 mt-3 service-grid-wthree text-center">
-          <div class="ser-Agriculture-grid">
-            <div class="about-icon mb-md-4 mb-3">
-              <span class="fa fa-viadeo" aria-hidden="true"></span>
-            </div>
-            <div class="ser-sevice-grid">
-              <h4 class="pb-3">Easy Detection</h4>
-              <p>Just need to click and upload leaf image.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6 col-sm-6 mt-lg-4 mt-3 service-grid-wthree text-center">
-          <div class="ser-Agriculture-grid">
-            <div class="about-icon mb-md-4 mb-3">
-              <span class="fa fa-pagelines" aria-hidden="true"></span>
-            </div>
-            <div class="ser-sevice-grid">
-              <h4 class="pb-3">Cause and Solution</h4>
-              <p>Provides the cause and solution of the identified diseases.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6 col-sm-6 mt-lg-4 mt-3 service-grid-wthree text-center">
-          <div class="ser-Agriculture-grid">
-            <div class="about-icon mb-md-4 mb-3">
-              <span class="fa fa-leaf" aria-hidden="true"></span>
-            </div>
-            <div class="ser-sevice-grid">
-              <h4 class="pb-3">Large Plant Support</h4>
-              <p>Supports around 14 different types of plants.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 <!-- Modal Structure -->
 <div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -297,7 +254,7 @@
 
     // Function to create the grid
 // Soil image path
-const soilImage = "../static/images/soil.jpg";
+const soilImage = "../static/images/soil.png";
 
 // Function to create the grid
 function createGrid() {
